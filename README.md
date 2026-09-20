@@ -159,34 +159,6 @@ index=main sourcetype=WinEventLog EventCode=4624
 
 ---
 
-### High Volume Outbound Traffic (Potential Exfiltration)
-
-```splunk
-index=network sourcetype=firewall action=allowed direction=outbound
-| stats sum(bytes_out) as TotalBytes by src_ip, dest_ip
-| where TotalBytes > 10000000
-| sort -TotalBytes
-| table src_ip, dest_ip, TotalBytes
-```
-
-**What this does:** Identifies internal hosts transferring large volumes of data to external destinations — potential data exfiltration indicator.
-
----
-
-### DNS Query Volume Anomaly (Potential DNS Tunneling)
-
-```splunk
-index=network sourcetype=dns
-| stats count as QueryCount by src_ip, query
-| where QueryCount > 100
-| sort -QueryCount
-| table src_ip, query, QueryCount
-```
-
-**What this does:** Flags hosts generating unusually high DNS query volumes — potential indicator of DNS tunneling or covert C2 communication.
-
----
-
 ## 6. Alert Triage in Splunk (TryHackMe Exercise)
 
 As part of the TryHackMe SOC Level 1 Alert Triage room, I practiced:
